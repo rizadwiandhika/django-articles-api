@@ -5,7 +5,7 @@ import jwt
 from http import HTTPStatus
 
 from django.http import HttpRequest
-from api.utils import error
+from myproject.utils import error
 from myproject import settings
 
 def is_auth(methods=['POST', 'PUT', 'DELETE']):
