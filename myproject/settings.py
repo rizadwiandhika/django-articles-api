@@ -82,7 +82,7 @@ WSGI_APPLICATION = 'myproject.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'ENGINE': env('DB_ENGINE'),
         'HOST': env('DB_HOST'),
         'PORT': env('DB_PORT'),
         'NAME': env('DB_NAME'),
@@ -96,7 +96,7 @@ CACHE_TTL = JWT_EXPIRE_SECONDS
 
 CACHES = {
     "default": {
-        'BACKEND': 'django.core.cache.backends.redis.RedisCache',
+        'BACKEND': env('REDIS_BACKEND'),
         "LOCATION": env('REDIS_LOCATION'),
         "TIMEOUT": CACHE_TTL, # in seconds
         "KEY_PREFIX": env('REDIS_KEY_PREFIX'),
