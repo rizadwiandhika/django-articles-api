@@ -10,6 +10,7 @@ if [ "$DATABASE" = "postgres" ]; then
   echo "PostgreSQL started"
 fi
 
+# Clear out the database then run migrate
 python manage.py flush --no-input
 python manage.py migrate
 
