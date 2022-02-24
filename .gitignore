@@ -306,7 +306,7 @@ Temporary Items
 # End of https://www.toptal.com/developers/gitignore/api/macos,visualstudiocode,python,django,git
 
 /ignores
-*.env
+*.env*
 !.env.example
 cek.py
 try-*.py
