@@ -5,6 +5,8 @@ import jwt
 from http import HTTPStatus
 
 from django.http import HttpRequest
+from django.core.cache import cache
+
 from myproject.utils import error
 from myproject import settings
 
@@ -19,6 +21,13 @@ def is_auth(methods=['POST', 'PUT', 'DELETE']):
                 token = token.split(' ')[1]
                 try:
                     decodedToken = jwt.decode(token, settings.JWT_SECRET, algorithms=['HS256'])
+                    tokenId = decodedToken.get('jti')
+                    userId = decodedToken.get('data', {}).get('user_id', None)
+
+                    userTokenBlacklist = json.loads(cache.get(userId, "[]"))
+                    if tokenId in userTokenBlacklist:
+                        raise Exception('Token is blacklisted')
+
                 except (jwt.ExpiredSignatureError, jwt.InvalidTokenError, Exception) as e:
                     print('jwt error:', e)
                     return error(HTTPStatus.UNAUTHORIZED, 'Invalid token')

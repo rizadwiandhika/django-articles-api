@@ -1,3 +1,5 @@
+import json
+import uuid
 import bcrypt
 import jwt
 
@@ -6,11 +8,12 @@ from datetime import datetime, timedelta
 
 from django.db import IntegrityError
 from django.http import HttpRequest, Http404
-from django.views.decorators.csrf import csrf_exempt
+from django.core.cache import cache
 from django.forms.models import model_to_dict
+from django.views.decorators.csrf import csrf_exempt
 
 from myproject import settings
-from myproject.middleware import parseJson
+from myproject.middleware import parseJson, is_auth
 from myproject.utils import success, error
 
 from users.models import User
@@ -61,8 +64,35 @@ def login(request: HttpRequest):
         return error(HTTPStatus.UNAUTHORIZED, 'Invalid password.')
     
 
-    expire = datetime.utcnow() + timedelta(hours=1)
-    payload = {'exp': expire, 'data': {'user_id': user.id, 'email': user.email}}
+    tokenId = uuid.uuid4().hex
+    expire = datetime.utcnow() + timedelta(seconds=settings.JWT_EXPIRE_SECONDS)
+    payload = {
+        'exp': expire, 
+        'jti': tokenId, 
+        'data': {'user_id': user.id, 'email': user.email}
+    }
     token = jwt.encode(payload, settings.JWT_SECRET, algorithm='HS256')
 
     return success(HTTPStatus.OK, 'Login success.', {'token': token})
+
+@csrf_exempt
+@is_auth()
+def logout(request):
+    if request.method != 'POST':
+        raise Http404
+
+    userId = request.user.get('data').get('user_id')
+    tokenId = request.user.get('jti')
+
+    userTokenBlacklist = cache.get(userId, None)
+
+    if userTokenBlacklist is None:
+        userTokenBlacklist = json.dumps([tokenId])
+        cache.set(userId, userTokenBlacklist)
+    else:
+        userTokenBlacklist = json.loads(userTokenBlacklist)
+        userTokenBlacklist.append(tokenId)
+        cache.set(userId, json.dumps(userTokenBlacklist))
+
+    print('userTokenBlacklist:', cache.get(userId))
+    return success(HTTPStatus.OK, 'Logout success.')

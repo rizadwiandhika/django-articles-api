@@ -17,7 +17,7 @@ from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 env = environ.Env()
-environ.Env.read_env()
+environ.Env.read_env(env_file=BASE_DIR / '.env', overrides=True)
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
@@ -29,8 +29,9 @@ JWT_SECRET = env('JWT_SECRET')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env('DEBUG') == 'True'
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = env('ALLOWED_HOSTS').split(' ')
 
+JWT_EXPIRE_SECONDS = env.int('JWT_EXPIRE_SECONDS', default=3600)
 
 # Application definition
 
@@ -81,7 +82,7 @@ WSGI_APPLICATION = 'myproject.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'HOST': env('DB_HOST'),
         'PORT': env('DB_PORT'),
         'NAME': env('DB_NAME'),
@@ -90,6 +91,17 @@ DATABASES = {
     }
 }
 
+# TTL for a data in cache (in seconds) default is 5 minutes
+CACHE_TTL = JWT_EXPIRE_SECONDS
+
+CACHES = {
+    "default": {
+        'BACKEND': 'django.core.cache.backends.redis.RedisCache',
+        "LOCATION": env('REDIS_LOCATION'),
+        "TIMEOUT": CACHE_TTL, # in seconds
+        "KEY_PREFIX": env('REDIS_KEY_PREFIX'),
+    },
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
