@@ -310,3 +310,4 @@ Temporary Items
 !.env.example
 cek.py
 try-*.py
+**/static*/
