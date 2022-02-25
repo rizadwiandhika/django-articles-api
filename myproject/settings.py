@@ -38,6 +38,7 @@ JWT_EXPIRE_SECONDS = env.int('JWT_EXPIRE_SECONDS', default=3600)
 INSTALLED_APPS = [
     'authentication.apps.AuthenticationConfig',
     'users.apps.UsersConfig',
+    'articles.apps.ArticlesConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
