@@ -11,10 +11,8 @@ services:
     hostname: web
     networks:
       - app-network
-    ports:
-      - 8000:8000
-    volumes:
-      - web-volume:/usr/src/app
+    expose:
+      - 8000
     env_file:
       - .env.prod
     depends_on:
@@ -23,6 +21,19 @@ services:
     deploy:
       restart_policy:
         condition: on-failure
+
+  nginx:
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
+    container_name: nginx
+    hostname: nginx
+    ports:
+      - 1337:80
+    networks:
+      - app-network
+    depends_on:
+      - web
 
   db:
     image: postgres:latest
@@ -49,7 +60,6 @@ services:
       - app-network
 
 volumes:
-  web-volume:
   db-volume:
   redis-volume:
 
