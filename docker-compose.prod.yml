@@ -5,7 +5,7 @@ services:
     image: rizadwiandhika/python-articles-api:latest
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.prod
     command: gunicorn myproject.wsgi:application --bind 0.0.0.0:8000
     container_name: web
     hostname: web
