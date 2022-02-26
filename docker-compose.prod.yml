@@ -9,6 +9,8 @@ services:
     command: gunicorn myproject.wsgi:application --bind 0.0.0.0:8000
     container_name: web
     hostname: web
+    volumes:
+      - web-volume:/home/app/web/staticfiles
     networks:
       - app-network
     expose:
@@ -32,6 +34,8 @@ services:
       - 1337:80
     networks:
       - app-network
+    volumes:
+      - web-volume:/home/app/web/staticfiles
     depends_on:
       - web
 
@@ -60,6 +64,7 @@ services:
       - app-network
 
 volumes:
+  web-volume:
   db-volume:
   redis-volume:
 
