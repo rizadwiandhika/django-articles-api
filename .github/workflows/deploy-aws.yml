@@ -92,5 +92,4 @@ jobs:
 
             docker rmi $(docker images -f "dangling=true" -q)
 
-            docker compose exec web python manage.py migrate --noinput
-            docker compose exec web python manage.py collectstatic --noinput
+            ./migrate-collect.sh
