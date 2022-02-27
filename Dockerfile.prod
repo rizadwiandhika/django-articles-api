@@ -16,7 +16,6 @@ COPY ./requirements.txt .
 # RUN apk update && apk add postgresql-dev gcc python3-dev musl-dev
 RUN apk update && apk add gcc libc-dev make git libffi-dev openssl-dev python3-dev libxml2-dev libxslt-dev
 
-# lint
 RUN pip install --upgrade pip
 COPY . .
 
@@ -37,6 +36,7 @@ ENV HOME=/home/app
 ENV APP_HOME=/home/app/web
 RUN mkdir $APP_HOME
 RUN mkdir $APP_HOME/staticfiles
+RUN mkdir $APP_HOME/mediafiles
 WORKDIR $APP_HOME
 
 # install dependencies

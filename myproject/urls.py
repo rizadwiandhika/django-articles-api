@@ -15,10 +15,15 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from django.conf.urls.static import static
 
+from myproject import settings
+
+# If DEBUG = False, static for MEDIA will not work
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('api/upload/', include('upload.urls')),
     path('api/auth/', include('authentication.urls')),
     path('api/users/', include('users.urls')),
     path('api/articles/', include('articles.urls')),
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

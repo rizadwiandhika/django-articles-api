@@ -10,7 +10,8 @@ services:
     container_name: web
     hostname: web
     volumes:
-      - web-volume:/home/app/web/staticfiles
+      - web-static-volume:/home/app/web/staticfiles
+      - web-media-volume:/home/app/web/mediafiles
     networks:
       - app-network
     expose:
@@ -35,7 +36,8 @@ services:
     networks:
       - app-network
     volumes:
-      - web-volume:/home/app/web/staticfiles
+      - web-static-volume:/home/app/web/staticfiles
+      - web-media-volume:/home/app/web/mediafiles
     depends_on:
       - web
 
@@ -64,7 +66,8 @@ services:
       - app-network
 
 volumes:
-  web-volume:
+  web-static-volume:
+  web-media-volume:
   db-volume:
   redis-volume:
 
