@@ -1,8 +1,16 @@
 # ARTICLES API
 
-### RESTful API built with pure Django. This project is built to familiarize RESTful API development with Django
+RESTful API built with Django. This project is built to familiarize RESTful API development using the Django framework. It provides simple services to manage articles-related data stored in the server
 
-### It provides simple services to manage articles data stored in the server
+<br>
+
+## Features:
+
+- Authentication & authorization
+- Users management
+- Articles management
+- Article's commentar management
+- Image file upload
 
 <br>
 
@@ -15,6 +23,7 @@
 5. [Docker](https://www.docker.com/) (Container)
 6. [AWS EC2](https://aws.amazon.com/ec2/) (Cloud computing service)
 7. [Github action](https://github.com/features/actions) (CI/CD pipeline)
+8. [Nginx](https://www.nginx.com/)(Web server as reverse proxy)
 
 <br>
 
