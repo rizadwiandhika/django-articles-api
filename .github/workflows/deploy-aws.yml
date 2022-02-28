@@ -2,6 +2,9 @@ name: Push docker hub & deploy AWS
 
 on:
   push:
+    paths-ignore:
+      - '**/README.md'
+      - 'docs/**'
     branches: [main]
 
 concurrency:
